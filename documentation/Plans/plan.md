@@ -23,6 +23,12 @@
 
 ## UX Flow
 <ol>
+
+<li> Landing Page</li>
+
+- **Services Offered** Users could see what the website has to offer to them
+- **Information about the Webiste** Ussers could learn what the website is all about and what are the goals of making the website.
+
 <li> User Authentication</li>
 
 - **Login/Registration:** Secure sign-in via Authentication.
@@ -30,19 +36,14 @@
 
 <li> Landing Page:</li>
 
-- **Xplora's hot spots:** Highlights popular places to the people right now.
-- **Navigation Menu:**  Quick links to business, *tambayan*, and tourists spots
-- **Search Bar:** Users could search places that other users have posted.
+- **Submit post** user s
 
 <li> Posts Interaction:
 </li> 
 
 - **Upvoting and Downvoting of posts:** Users can rate whether the place is a good spot or not.
-- **User Rating:** Users can rank other users as to how trustable they are.
+- **Bookmarking Post:** User can bookmark posts and have it stored in the bookmark tab.
 
-<li>Community Engagement:</li>
-
-- **Forum:** Browse and participate in discussion threads.
 
 </ol>
 
@@ -51,18 +52,18 @@
  <li> Navigation Bar
 
  - **Home:** Featured Hot spots recommended by Xplora.
- - **Submit Posts:** The users can submit posts.
- - **About us:** Learn more abou the developers
- - **Community:** Explore other user's posts
+ - **Spots:** The users can submit posts.
+ - **About us:** Learn more about the developers
+ - **Log Out button:** Log's the user that is signed in out of the website
 </li>
 
 <li>
 Screen Layout
 
-- **Home Screen:**  Card-based layout with project previews, images, and brief descriptions.
-- **Submitted Posts SCreen:**  Scrollable view with images, text, and interactive review submission.
-- **Submission Screen:** Form layout with input fields, image uploader, and submit button.
-- **Community Screen:** List of threads with new post button and sorting/filter options.
+- **Home Screen:**  Hero page about information of the website and services offered.
+- **Submitted Posts SCreen:**  Scrollable view with texts and interactive review submission.
+- **Submit post:** Form layout with input fields and submit button.
+- **Category Filters** See sorted out posts based on their categories
 </li>
  
 
@@ -71,7 +72,6 @@ Screen Layout
 Primary Colors:
 
 - **Deep Charcoal:**  Creates a modern and sleek background.
-- **Electric Blue:** Adds vibrancy and highlights interactive elements.
 </li>
 
 <li>
@@ -96,18 +96,66 @@ Key Entitites:
 1. **User**
    - `user_id` (Primary Key)
    - `name`
-
    - `email`
-
-   - `password_hash`
-
-   - `profile_image_url`
-
+   - `password`
    - `date_joined`
 
+2. **Upload Post**
+- `name`
+- `category`
+- `location`
+- `location`
+- `description`
+- `ownerID`
+
+3. **Delete Post**
+- `id`
+
+4. **Like Place**
+- `place_id`
+- `user_id`
+
+5. **Unlike Place**
+- `place_id`
+- `user_id`
+
+6. **Bookmark Place**
+- `place_id`
+- `user_id`
+
+7. **Remove Bookmarked Place**
+- `place_id`
+- `user_id`
 
 ##  Dataflow
 
 1. **User Authentication & Registration:**
    - **Authentication** is used to create new users or sign in existing ones.
    - **Dataflow:** User credentials → Firebase Auth → Secure session token.
+
+2. **Post Submission:**
+   - **User Action:** Submit new project using the submission form.
+   - **Dataflow:**  
+     - User inputs (text)  
+     - Post and User data → API backend
+3. **Liking Post**
+    -Frontend → POST /api/places/{place_id}/like → Backend → Database → Realtime Update
+       ↑ (like action)   ↑ (rate limiting)                               ↑ (denormalized counts)
+
+  - **Dataflow:**
+    - Verify user authentication
+    - Validate post exists
+    - Record interaction (like)
+    - Update aggregated counts
+
+3. **Bookmarking Post**
+    -Frontend → POST /api/places/{place_id}/bookmark → Backend → Database → Realtime Update
+       ↑ (like action)   ↑ (rate limiting)                               ↑ (denormalized counts)
+
+   - **Dataflow:**
+    - Verify user authentication
+    - Validate post exists
+    - Record interaction (like)
+    - Update aggregated counts
+
+
